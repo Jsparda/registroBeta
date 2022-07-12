@@ -24,17 +24,47 @@ app.get("/api/get", (req, res) => {
     else {
       console.log("Result:", result);
     }
-    res.send("It is done!");
+    res.send(result);
   })
 })
 
+app.post("/api/post", (req, res) => {
+  const { nombre, aPaterno, contacto, resenia } = req.body;
+  const sqlInsert = "INSERT INTO Usuarios (nombre, aPaterno, contacto, resenia) VALUES (?, ?, ?, ?)"
+  db.query(sqlInsert, [nombre, aPaterno, contacto, resenia], (err, result) => {
+    if(err){
+      console.log(err);
+      res.status(400).send('Bad Request')
+    }
+    else {
+      console.log(result);
+      res.status(200).send('OK')
+    }
+  })
+});
+
+app.delete("/api/remove/:id", (req, res) => {
+  const { id } = req.params;
+  const sqlRemove = "DELETE FROM Usuarios WHERE id=?"
+  db.query(sqlRemove, id, (err, result) => {
+    if(err){
+      console.log(err);
+      res.status(400).send('Bad Request')
+    }
+    else {
+      console.log(result);
+      res.status(200).send('OK')
+    }
+  })
+});
+
 app.get("/", (req, res) => {
-  // const sqlInstert = "INSERT INTO Admins (user, passw) VALUES ('admin', 'admin')";
+  // const sqlInstert = "INSERT INTO Usuarios (nombre, aPaterno, aMaterno, contacto, resenia) VALUES ('Guillermo', 'González', 'Junior', 'memo@correo.com', 'Quiero sandwiches de dos pesos again!!')";
   // db.query(sqlInstert, (err, result) => {
   //   console.log("Error", err),
   //   console.log("Result", result);
   // })
-    res.send("Message from express!!");
+  //   res.send("It is done!!");
 })
 
 app.listen(5000, () => {
